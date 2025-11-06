@@ -1,6 +1,6 @@
 <template>
   <v-container class="fill-height" max-width="900">
-    <div>
+    <div class="mt-12">
       <v-img
         class="mb-4"
         height="150"

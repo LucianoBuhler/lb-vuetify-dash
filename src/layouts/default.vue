@@ -1,10 +1,22 @@
+
 <template>
   <v-layout class="rounded rounded-md border">
-    <v-app-bar title="Application bar">
+    <v-app-bar>
+      <template #prepend>
+        <v-app-bar-nav-icon
+          variant="text"
+          @click.stop="drawer = !drawer"
+        />
+        <v-toolbar-title>
+          <router-link class="text-decoration-none" to="/">
+            LB Dashboard
+          </router-link>
+        </v-toolbar-title>
+      </template>
       <template #append>
-         <v-menu>
-          <template v-slot:activator="{ props }">
-            <v-avatar v-bind="props" size="45" color="blue">
+        <v-menu>
+          <template #activator="{ props }">
+            <v-avatar v-bind="props" color="blue" size="45">
               <span>LB</span>
             </v-avatar>
           </template>
@@ -21,20 +33,28 @@
       </template>
     </v-app-bar>
 
-    <v-navigation-drawer>
-      <v-list nav>
-        <v-list-item title="Navigation drawer" link></v-list-item>
+    <v-navigation-drawer
+      v-model="drawer"
+      expand-on-hover
+      permanent
+      rail
+    >
+      <v-list density="compact" nav>
+        <v-list-item prepend-icon="mdi-note-outline" title="Posts" :to="`/posts`" />
+        <v-list-item prepend-icon="mdi-comment-outline" title="Comments" :to="`comments`" />
       </v-list>
     </v-navigation-drawer>
 
     <v-main class="d-flex align-center justify-center" height="300">
       <v-container>
-        <router-view></router-view>
+        <router-view />
       </v-container>
     </v-main>
   </v-layout>
 </template>
 
 <script lang="ts" setup>
-  //
+  import { ref } from 'vue'
+
+  const drawer = ref(false)
 </script>
