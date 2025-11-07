@@ -32,6 +32,9 @@
 
       <v-data-table
         v-model="selected"
+        v-click-outside="handleClickOutside"
+        v-resize="handleResize"
+        :density="tableDensity"
         :headers="headers"
         item-value="title"
         :items="posts"
@@ -42,7 +45,7 @@
         <template #[`item.title`]="{ item }">
           <v-dialog fullscreen>
             <template #activator="{ props: activatorProps }">
-              <button v-bind="activatorProps">{{ item.title }}</button>
+              <button v-ripple v-bind="activatorProps">{{ item.title }}</button>
             </template>
 
             <template #default="{ isActive }">
@@ -116,4 +119,17 @@
       key: 'author',
     },
   ] as const)
+
+  function handleClickOutside () {
+    selected.value = []
+  }
+
+  type densities = 'default' | 'compact' | 'comfortable'
+  const tableDensity = ref<densities>('default')
+  function handleResize() {
+    let density: densities = 'default'
+    if (window.innerHeight < 800) density = 'comfortable'
+    if (window.innerHeight < 600) density = 'compact'
+    tableDensity.value = density
+  }
 </script>
