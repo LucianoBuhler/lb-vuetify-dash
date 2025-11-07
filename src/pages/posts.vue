@@ -21,12 +21,50 @@
       :items="posts"
       :search="search"
       show-select
-    />
+    >
+      <!-- <template #item.title="{item}"> -->
+      <template #[`item.title`]="{ item }">
+        <v-dialog fullscreen>
+          <template #activator="{ props: activatorProps }">
+            <button v-bind="activatorProps">{{ item.title }}</button>
+          </template>
+
+          <template #default="{ isActive }">
+            <v-card title="Edit Posts">
+              <v-card-text>
+                <PostForm
+                  ref="postForm"
+                  :post="item"
+                  @submit="isActive.value = false"
+                />
+              </v-card-text>
+
+              <v-card-actions>
+                <v-spacer />
+
+                <v-btn
+                  text="Cancel"
+                  @click="isActive.value = false"
+                />
+
+                <v-btn
+                  color="blue"
+                  text="Save Post"
+                  variant="flat"
+                  @click="postForm.submit()"
+                />
+              </v-card-actions>
+            </v-card>
+          </template>
+        </v-dialog>
+      </template>
+    </v-data-table>
   </v-card>
 </template>
 
 <script setup lang="ts">
   import { ref } from 'vue'
+  import PostForm from '@/components/PostForm.vue'
 
   const posts = ref([
     { title: 'Post 1', author: 'John' },
@@ -40,7 +78,8 @@
   ])
 
   const selected = ref([])
-  const search = ref([])
+  const search = ref('')
+  const postForm = ref<any>(null)
 
   const headers = ref([
     {
@@ -52,7 +91,7 @@
     {
       title: 'Author',
       align: 'end',
-      key: 'author'
+      key: 'author',
     },
-  ])
+  ] as const)
 </script>

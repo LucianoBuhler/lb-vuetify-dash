@@ -13,7 +13,12 @@ declare module 'vue' {
   export interface GlobalComponents {
     AppFooter: typeof import('./components/AppFooter.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
+    'Post-': typeof import('./components/Post-.vue')['default']
+    PostForm: typeof import('./components/PostForm.vue')['default']
+    PostFrom: typeof import('./components/PostFrom.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    TipTapEditor: typeof import('./components/TipTapEditor.vue')['default']
+    VQuillField: typeof import('./components/VQuillField.vue')['default']
   }
 }
