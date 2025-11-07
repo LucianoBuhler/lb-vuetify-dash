@@ -1,68 +1,89 @@
 <template>
-  <v-card
-    flat
-    title="Posts"
-  >
-    <template #text>
-      <v-text-field
-        v-model="search"
-        hide-details
-        label="Search"
-        prepend-inner-icon="mdi-magnify"
-        single-line
-        variant="outlined"
-      />
-    </template>
-
-    <v-data-table
-      v-model="selected"
-      :headers="headers"
-      item-value="title"
-      :items="posts"
-      :search="search"
-      show-select
+  <div>
+    <v-alert
+      v-model="postSaved"
+      closable
+      title="Post Updated"
+      type="success"
+      variant="tonal"
+    />
+    <v-card
+      flat
+      title="Posts"
     >
-      <!-- <template #item.title="{item}"> -->
-      <template #[`item.title`]="{ item }">
-        <v-dialog fullscreen>
-          <template #activator="{ props: activatorProps }">
-            <button v-bind="activatorProps">{{ item.title }}</button>
-          </template>
 
-          <template #default="{ isActive }">
-            <v-card title="Edit Posts">
-              <v-card-text>
-                <PostForm
-                  ref="postForm"
-                  :post="item"
-                  @submit="isActive.value = false"
-                />
-              </v-card-text>
+      <v-snackbar v-model="postSaved" :timeout="4000">
+        <div class="d-flex align-center">
+          <v-icon class="text-green pr-3" icon="mdi-check-circle" />
+          Post Saved!
+        </div>
+      </v-snackbar>
 
-              <v-card-actions>
-                <v-spacer />
-
-                <v-btn
-                  text="Cancel"
-                  @click="isActive.value = false"
-                />
-
-                <v-btn
-                  color="blue"
-                  text="Save Post"
-                  variant="flat"
-                  @click="postForm.submit()"
-                />
-              </v-card-actions>
-            </v-card>
-          </template>
-        </v-dialog>
+      <template #text>
+        <v-text-field
+          v-model="search"
+          hide-details
+          label="Search"
+          prepend-inner-icon="mdi-magnify"
+          single-line
+          variant="outlined"
+        />
       </template>
-    </v-data-table>
-  </v-card>
+
+      <v-data-table
+        v-model="selected"
+        :headers="headers"
+        item-value="title"
+        :items="posts"
+        :search="search"
+        show-select
+      >
+        <!-- <template #item.title="{item}"> -->
+        <template #[`item.title`]="{ item }">
+          <v-dialog fullscreen>
+            <template #activator="{ props: activatorProps }">
+              <button v-bind="activatorProps">{{ item.title }}</button>
+            </template>
+
+            <template #default="{ isActive }">
+              <v-card title="Edit Posts">
+                <v-card-text>
+                  <PostForm
+                    ref="postForm"
+                    :post="item"
+                    @submit="
+                      isActive.value = false;
+                      postSaved = true;
+                    "
+                  />
+                </v-card-text>
+
+                <v-card-actions>
+                  <v-spacer />
+
+                  <v-btn
+                    text="Cancel"
+                    @click="isActive.value = false"
+                  />
+
+                  <v-btn
+                    color="blue"
+                    text="Save Post"
+                    variant="flat"
+                    @click="postForm.submit()"
+                  />
+                </v-card-actions>
+              </v-card>
+            </template>
+          </v-dialog>
+        </template>
+      </v-data-table>
+    </v-card>
+  </div>
 </template>
 
 <script setup lang="ts">
+  import { refAutoReset } from '@vueuse/core'
   import { ref } from 'vue'
   import PostForm from '@/components/PostForm.vue'
 
@@ -80,6 +101,7 @@
   const selected = ref([])
   const search = ref('')
   const postForm = ref<any>(null)
+  const postSaved = refAutoReset(false, 4000)
 
   const headers = ref([
     {
