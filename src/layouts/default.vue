@@ -45,10 +45,10 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-main class="d-flex align-center justify-center" height="300">
-      <v-container>
+    <v-main style="min-height: 300px">
+      <div class="pa-5">
         <router-view />
-      </v-container>
+      </div>
     </v-main>
   </v-layout>
 </template>
